@@ -66,5 +66,20 @@ kubectl apply -f deploy/graylog-deployment.yaml
 
 Configurar GELF via UDP:
 
-**Graylog UI:** (System -> Input -> Select GELF UDP)
+- Usuário e senha padrão: _admin_
+- **Graylog UI:** (System -> Input -> Select GELF UDP)
+
+## Traces com Jaeger
+
+Deploy do OpenTelemetry Collector (recebe, processa e envia os traces para o Jaeger):
+```
+kubectl apply -f deploy/opentelemetry-deployment.yaml
+```
+
+Deploy do Jaeger:
+```
+kubectl apply -f deploy/jaeger-deployment.yaml
+```
+
+**Jaeger UI:** http://localhost:16686
 
