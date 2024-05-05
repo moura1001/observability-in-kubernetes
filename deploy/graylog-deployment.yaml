@@ -15,22 +15,22 @@ spec:
       containers:
       - name: graylog
         image: graylog/graylog:5.2
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "500m"
-          limits:
-            memory: "256Mi"
-            cpu: "500m"
+#        resources:
+#          requests:
+#            memory: "256Mi"
+#            cpu: "500m"
+#          limits:
+#            memory: "256Mi"
+#            cpu: "500m"
         ports:
         - containerPort: 9000  # Graylog UI port
         - containerPort: 12201  # GELF UDP input port
         - containerPort: 1514  # Syslog input port
         env:
         - name: GRAYLOG_PASSWORD_SECRET
-          value: forpasswordencryption
+          value: forpasswordencryption # CHANGE ME (must be at least 16 characters)!
         - name: GRAYLOG_ROOT_PASSWORD_SHA2
-          value: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+          value: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918 # Password: admin
         - name: GRAYLOG_HTTP_EXTERNAL_URI
           value: http://localhost:9000/  # External URI for Graylog UI
         - name: GRAYLOG_HTTP_BIND_ADDRESS
@@ -62,16 +62,3 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 9000  # Graylog UI port
----
-# Optional: Service to expose Graylog REST API
-apiVersion: v1
-kind: Service
-metadata:
-  name: graylog-api
-spec:
-  selector:
-    app: graylog
-  ports:
-  - protocol: TCP
-    port: 9000
-    targetPort: 9000  # Graylog REST API port

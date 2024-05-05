@@ -62,7 +62,7 @@ func endpointHandler2(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	hook := graylog.NewGraylogHook("localhost:12201", map[string]interface{}{"this": "is logged every time"})
+	hook := graylog.NewGraylogHook("graylog:12201", map[string]interface{}{"this": "is logged every time"})
 	defer hook.Flush()
 	logrus.AddHook(hook)
 

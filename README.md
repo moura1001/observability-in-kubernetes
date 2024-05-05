@@ -64,3 +64,7 @@ Deploy do Graylog:
 kubectl apply -f deploy/graylog-deployment.yaml
 ```
 
+Configurar GELF via UDP:
+
+**Graylog UI:** (System -> Input -> Select GELF UDP)
+

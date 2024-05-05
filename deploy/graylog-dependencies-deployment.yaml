@@ -15,13 +15,13 @@ spec:
       containers:
       - name: mongodb
         image: mongo:6.0.4
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "500m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+#        resources:
+#          requests:
+#            memory: "128Mi"
+#            cpu: "500m"
+#          limits:
+#            memory: "128Mi"
+#            cpu: "500m"
         ports:
         - containerPort: 27017  # MongoDB port
         volumeMounts:
@@ -59,18 +59,18 @@ spec:
       containers:
       - name: opensearch
         image: opensearchproject/opensearch:2.6.0
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+#        resources:
+#          requests:
+#            memory: "512Mi"
+#            cpu: "500m"
+#          limits:
+#            memory: "512Mi"
+#            cpu: "500m"
         env:
         - name: OPENSEARCH_JAVA_OPTS
-          value: "-Xms128m -Xmx128m"
+          value: "-Xms512m -Xmx512m"
         - name: bootstrap.memory_lock
-          value: "false"
+          value: "true"
         - name: discovery.type
           value: single-node
         - name: action.auto_create_index
