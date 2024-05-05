@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:6.0.4
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "500m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 27017  # MongoDB port
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data/db  # MongoDB data directory
+      volumes:
+      - name: mongodb-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  selector:
+    app: mongodb
+  ports:
+  - protocol: TCP
+    port: 27017  # MongoDB port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensearch
+  template:
+    metadata:
+      labels:
+        app: opensearch
+    spec:
+      containers:
+      - name: opensearch
+        image: opensearchproject/opensearch:2.6.0
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+        - name: OPENSEARCH_JAVA_OPTS
+          value: "-Xms128m -Xmx128m"
+        - name: bootstrap.memory_lock
+          value: "false"
+        - name: discovery.type
+          value: single-node
+        - name: action.auto_create_index
+          value: "false"
+        - name: plugins.security.ssl.http.enabled
+          value: "false"
+        - name: plugins.security.disabled
+          value: "true"
+        ports:
+        - containerPort: 9200  # OpenSearch HTTP port
+        - containerPort: 9300  # OpenSearch transport port
+        - containerPort: 9600  # OpenSearch Performance Analyzer port
+        volumeMounts:
+        - name: opensearch-data
+          mountPath: /usr/share/opensearch/data  # OpenSearch data directory
+      volumes:
+      - name: opensearch-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch
+spec:
+  selector:
+    app: opensearch
+  ports:
+  - protocol: TCP
+    port: 9200  # OpenSearch HTTP port
+    targetPort: 9200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch-transport
+spec:
+  selector:
+    app: opensearch
+  ports:
+  - protocol: TCP
+    port: 9300  # OpenSearch transport port
+    targetPort: 9300
+

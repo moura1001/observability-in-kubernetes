@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/gemnasium/logrus-graylog-hook/v3"
+	"github.com/sirupsen/logrus"
 	"log"
 	"net/http"
 	"os"
@@ -44,6 +46,7 @@ func endpointHandler1(w http.ResponseWriter, r *http.Request) {
 
 	// Respond
 	fmt.Fprintln(w, fmt.Sprintf("Response from endpoint 1 from node %s", HOSTNAME))
+	logrus.Info("request successfully", "handler", "endpointHandler1", "host", HOSTNAME)
 }
 
 func endpointHandler2(w http.ResponseWriter, r *http.Request) {
@@ -55,9 +58,14 @@ func endpointHandler2(w http.ResponseWriter, r *http.Request) {
 
 	// Respond
 	fmt.Fprintln(w, fmt.Sprintf("Response from endpoint 2 from node %s", HOSTNAME))
+	logrus.Info("request successfully", "handler", "endpointHandler2", "host", HOSTNAME)
 }
 
 func main() {
+	hook := graylog.NewGraylogHook("localhost:12201", map[string]interface{}{"this": "is logged every time"})
+	defer hook.Flush()
+	logrus.AddHook(hook)
+
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/endpoint1", endpointHandler1)
 	http.HandleFunc("/endpoint2", endpointHandler2)

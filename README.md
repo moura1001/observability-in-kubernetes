@@ -52,3 +52,15 @@ Deploy do Grafana:
 kubectl apply -f deploy/grafana-deployment.yaml
 ```
 
+## Logs com Graylog
+
+Deploy das dependências (MongoDB e OpenSearch):
+```
+kubectl apply -f deploy/graylog-dependencies-deployment.yaml
+```
+
+Deploy do Graylog:
+```
+kubectl apply -f deploy/graylog-deployment.yaml
+```
+
