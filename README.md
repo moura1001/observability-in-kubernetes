@@ -1,5 +1,8 @@
 # Observability in Kubernetes
 
+Diagrama de arquitetura:
+![1-diagram.png](docs/images/1-diagram.png?raw=true "Architectural diagram")
+
 ## Prerrequisitos
 
 - Docker
@@ -52,6 +55,17 @@ Deploy do Grafana:
 kubectl apply -f deploy/grafana-deployment.yaml
 ```
 
+Saúde dos serviços:
+![2-prometheus-ui-healthy.png](docs/images/2-prometheus-ui-healthy.png?raw=true "Prometheus UI Healthy")
+
+Utilizei o Apache Bench para realizar uma simulação de carga com 300 requisições para o serviço de Load Balancer Nginx, que conseguiu distribuir as requisições igualmente utilizando um algoritmo Round Robin dentre os 3 serviços com a aplicação Go.
+
+Métricas no Prometheus:
+![3-prometheus-ui-metrics.png](docs/images/3-prometheus-ui-metrics.png?raw=true "Prometheus UI Metrics")
+
+Dashboard Grafana:
+![4-grafana-ui.png](docs/images/4-grafana-ui.png?raw=true "Grafana UI")
+
 ## Logs com Graylog
 
 Deploy das dependências (MongoDB e OpenSearch):
@@ -69,6 +83,9 @@ Configurar GELF via UDP:
 - Usuário e senha padrão: _admin_
 - **Graylog UI:** (System -> Input -> Select GELF UDP)
 
+Logs:
+![5-graylog-ui.png](docs/images/5-graylog-ui.png?raw=true "Graylog UI")
+
 ## Traces com Jaeger
 
 Deploy do OpenTelemetry Collector (recebe, processa e envia os traces para o Jaeger):
@@ -83,3 +100,8 @@ kubectl apply -f deploy/jaeger-deployment.yaml
 
 **Jaeger UI:** http://localhost:16686
 
+Traces no Console do OpenTelemetry Collector:
+![6-opentelemetry-collector.png](docs/images/6-opentelemetry-collector.png?raw=true "OpenTelemetry Collector.png")
+
+Jaeger UI:
+![7-jaeger-ui.png](docs/images/7-jaeger-ui.png?raw=true "Jaeger UI")
